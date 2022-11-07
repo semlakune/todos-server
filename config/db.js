@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 
-const uri = "mongodb+srv://todos-permata:todos-permata@cluster0.jsye27s.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGODB_URI
 const client = new MongoClient(uri);
 let dbConnect
 
