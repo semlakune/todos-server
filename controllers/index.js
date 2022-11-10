@@ -15,7 +15,9 @@ class Controller {
                 initialCategories.forEach((category) => {
                     Category.create({name: category, userId: data.insertedId})
                 })
-                res.status(201).json({_id: data.insertedId, email})
+                const payload = { id: data.insertedId }
+                const access_token = sign(payload, process.env.JWT_TOKEN)
+                res.status(200).json({ access_token })
             }
         )
             .catch((err) => {
