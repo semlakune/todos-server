@@ -18,7 +18,7 @@ class Category {
     }
 
     static findById(categoryId) {
-        return this.category().findOne({_id: ObjectId(categoryId)});
+        return this.category().findOne({_id: ObjectId(categoryId)})
     }
 
     static delete(categoryId) {

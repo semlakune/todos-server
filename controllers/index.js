@@ -8,10 +8,13 @@ class Controller {
     // users
     static register(req, res, next) {
         const {fullName, username, email, password, phoneNumber} = req.body;
+        const initialCategories = ["Favorite", "Work", "Groceries", "Study", "Sports"]
 
         User.create({fullName, username, email, password, phoneNumber})
             .then((data) => {
-                Category.create({name: "Work", userId: data.insertedId})
+                initialCategories.forEach((category) => {
+                    Category.create({name: category, userId: data.insertedId})
+                })
                 res.status(201).json({_id: data.insertedId, email})
             }
         )
@@ -85,6 +88,17 @@ class Controller {
 
     static deleteCategory(req, res, next) {
         const { categoryId } = req.params
+
+        Todo.findByCategory(categoryId)
+            .then((data) => {
+                data.forEach(e => {
+                    Todo.delete(e._id)
+                })
+            })
+            .catch((err) => {
+                next(err);
+            });
+
         Category.delete(categoryId)
             .then((_) => {
                 res.status(200).json({ message: "success delete category" })
@@ -109,6 +123,17 @@ class Controller {
 
     static findTodos(req, res, next) {
         Todo.findAll(req.user.id)
+            .then((data) => {
+                res.status(200).json(data)
+            })
+            .catch((err) => {
+                next(err);
+            });
+    }
+
+    static findTodosByCategory(req, res, next) {
+        const { categoryId } = req.params
+        Todo.findByCategory(categoryId)
             .then((data) => {
                 res.status(200).json(data)
             })

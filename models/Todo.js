@@ -18,6 +18,28 @@ class Todo {
         return this.todo().find({userId: id}).toArray()
     }
 
+    static findByCategory(categoryId) {
+        return this.todo().find({categoryId}).toArray()
+        // return this.todo().aggregate([
+        //     {
+        //         $lookup: {
+        //             from: "categories",
+        //             localField: "categoryId",
+        //             foreignField: "_id",
+        //             as: "todo_category"
+        //         }
+        //     },
+        //     {
+        //         $project: {
+        //             _id : 1,
+        //             task: 1,
+        //             status: 1,
+        //             categoryName: "$todo_category"
+        //         }
+        //     }
+        // ]).toArray()
+    }
+
     static findById(taskId) {
         return this.todo().findOne({_id: ObjectId(taskId)});
     }
